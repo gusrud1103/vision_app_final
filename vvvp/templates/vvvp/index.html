@@ -1,0 +1,231 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Your mate - 주변 환경 안내 시스템 </title>
+
+  <!-- Bootstrap Core CSS -->
+  <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="static/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="static/css/stylish-portfolio.css" rel="stylesheet">
+  <!-- <link href="css/main.css" rel="stylesheet">
+  <link href="css/intro.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet"> -->
+  <link href="static/css/stylish-portfolio.min.css" rel="stylesheet">
+  <script src = '/static/js/annyang.js'></script>
+  <script src = '/static/js/main.js'></script>
+  <script>
+  annyang.start({autoRestart: true, continuous: true})
+  var recognition = annyang.getSpeechRecognizer();
+  var final_transcript = '';
+  recognition.interimResults = true;
+  recognition.onresult = function(event){
+    var interim_transcript = '';
+    final_transcript = '';
+    for(var i = event.resultIndex; i<event.results.length;++i){
+      if(event.results[i].isFinal){
+        final_transcript += event.results[i][0].transcript;
+        console.log("final_transcript = " + final_transcript);
+
+      }
+      else{
+        interim_transcript += event.results[i][0].transcript;
+        console.log("interim_transcript = " + interim_transcript);
+      }
+    }
+    document.getElementById('result').innerHTML = '직전 발화내용 = '+interim_transcript +'<br/>발화내용 = '+final_transcript;
+    console.log('interim = '+interim_transcript +'|final = '+final_transcript);
+    if (isKeywordInText(final_transcript) == true){
+        // recognition.stop();
+        take_picture();
+      }
+  };
+  function isKeywordInText(text){
+    var keyword_list = ['뭐야', '뭐냐', '상황', '일이야', '일 있나', '일 있어','무슨', '알려줘', '카메라', '이게 뭐야', '무슨 일이야'];
+
+    for (var keyword of keyword_list){
+      if (text.search(keyword) != -1){
+        return true
+      }
+    }
+    return false
+  }
+  </script>
+
+</head>
+
+<body id="page-top">
+
+  <!-- Navigation -->
+  <a class="menu-toggle rounded" href="#">
+    <i class="fas fa-bars"></i>
+  </a>
+  <nav id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand">
+        <a class="js-scroll-trigger" href="#page-top">Your mate.</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#page-top">Home</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#about">About</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#services">Services</a>
+      </li>
+
+    </ul>
+  </nav>
+
+  <!-- Header -->
+  <header class="masthead d-flex">
+
+    <!-- 아무 화면 클릭시, 다음 페이지 이동 -->
+    <div class="container text-center my-auto">
+      <h1 class="mb-1">Your mate</h1>
+
+      <h3 class="mb-5">
+        <em>I can always provide you with informations <br>about everythings around you ;)
+        </em>
+      </h3>
+
+      <h4> "이게 뭐야?" ,"무슨 일이야?", "카메라" 를 말씀하시면 카메라가 자동으로 실행됩니다.</h4><br/>
+      <h5 id = "result">
+        결과가 없습니다.</h5>
+
+    </div>
+    <div class="overlay"></div>
+
+  </header>
+<!--
+
+  <section class="content-section bg-light" id="about">
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <a href="#about"></a>
+          <h2><img src="static/img/main_image_t.png" width="100" height="100"> 주변 환경 안내 시스템 </h2>
+          <p class="lead mb-5">사용자의 주변 환경을 카메라로 인식해, 음성 메세지로 안내해주는 시스템입니다.</p>
+
+        </div>
+      </div>
+    </div>
+  </section>
+-->
+  <!-- Services -->
+  <section class="content-section bg-primary text-white text-center" id="services">
+
+
+    <div class="container", id=snapshot>
+      <div class="panel panel-default">
+
+        <div class="panel-body">
+          <video autoplay class="hidden"></video>
+          <!-- <div class='butto-wrapper' style="float:right;">
+
+          <button type="button" id="btn-snapshot" class="btn_style"> -->
+
+            <h3 class="text-secondary mb-0"  style="text-align: center;"> Camera</h3>
+          <!-- <img id="camera_space" src="img/bg-masthead.jpg" style="width: 100%;height: auto;"> -->
+            <div><div style="border:2px"><canvas class="piture--place"></canvas></div></div>
+          <!-- </button> -->
+        <!-- </div> -->
+
+          <br>
+          <br>
+          <br>
+          <hr>
+
+      </div>
+
+    </div>
+  </div>
+
+
+          <h3 class="text-secondary mb-0" style="text-align: center"> Result</h3><br>
+          <h4>Your mate가 분석한 내용입니다.</h4><br>
+
+          <textarea  id="myvalue"  cols="60"  rows="5" ></textarea>
+          <script type="text/javascript" src="static/js/main.js"></script>
+          <!-- 클릭하면 다시 한번 들려주기 -->
+          <br></br>
+          <h4>재생버튼을 클릭하면 다시 들으실 수 있습니다.</h4></br>
+          <button type="button" id="btn-rec" class="btn_style">
+           <img src="static/img/megaphone1.png" style="width:100px; height:100px">
+          </button>
+
+
+  </section>
+    <div class="panel-body">
+        <div class="rec-area" id="text-box"></div>
+    </div>
+    <div class="panel-footer">
+      <div id="img-desc-text"></div>
+      <div id="img-desc-accuracy"></div>
+    </div>
+  </div>
+
+  <!-- Callout -->
+
+
+  <!-- Portfolio -->
+
+
+  <!-- Call to Action -->
+
+
+  <!-- Map -->
+  <!--
+  <section id="contact" class="map">
+    <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
+    <br />
+    <small>
+      <a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
+    </small>
+  </section>
+-->
+
+
+  <!-- Footer -->
+  <footer class="footer text-center">
+    <div class="container">
+
+      <p class="text-muted small mb-0">Copyright &copy; 봄길 2019</p>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="static/vendor/jquery/jquery.min.js"></script>
+  <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="static/js/stylish-portfolio.min.js"></script>
+  <script src="static/js/main.js"></script>
+  <script src="static/js/upload-image.js"></script>
+
+
+</body>
+
+</html>
